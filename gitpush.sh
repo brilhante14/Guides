@@ -1,3 +1,5 @@
+#!/bin/bash
+
 mysqldump redmine > /tmp/redmine-`date +%d%m%Y`.sql -h localhost -u root -pgeosales
 
 git add .
