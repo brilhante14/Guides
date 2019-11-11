@@ -1,3 +1,5 @@
+mysqldump redmine > /tmp/redmine-`date +%d%m%Y`.sql -h localhost -u root -pgeosales
+
 git add .
 
 #echo 'Enter the commit message:'
