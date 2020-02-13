@@ -1,0 +1,69 @@
+# sudo passwd
+# apt-get update
+# apt-get dist-upgrade
+# apt-get install vsftpd
+# systemctl start vsftpd
+# systemctl enable vsftpd
+Obs: habilitar write enable no conf
+Obs. 2: vi /etc/ftusers --> Remover usuário root para usar FTP
+
+
+# fdisk -l --> Listar os discos do S.O.
+# mkdir "/Docker" --> Criar o diretório para comportar a nova partição
+# mkfs.ext4 "/dev/xvdc" --> Cria um formato de disco para a partição desejada
+# mount /dev/xvdc /Docker/ --> Monta a partição do S.O. para o diretório desejado
+# blkid --> Mostra os códigos alfa numéricos do disco
+# vi /etc/fstab --> Automatizar montagem de partição no boot do sistema
+	UUID="bac76e57-1073-423e-a7ce-addb3d1c560f" /Docker ext4 defaults 0 0 --> Adicionar linha no fstab conforme UUID fornecido pelo sistema
+
+
+# sudo dpkg-reconfigure tzdata --> Alterar fuso horário (esta config já resolve)
+	/usr/bin/tzselect --> Alterar fuso horário
+	./usr/share/zoneinfo/tzselect --> Alterar fuso horário
+# date
+
+
+# cd /Docker --> Entrar no diretório real para começar instalação do Docker
+# curl -fsSL get.docker.com -o get-docker.sh
+# sh get-docker.sh
+# groupdel docker
+# adduser docker
+# vi /etc/ssh/sshd_config
+Obs: #PermitRootLogin yes --> Comentar linha para bloquear conexão direta via root
+# Testar conexão SSH via usuário docker
+# /etc/init.d/ssh restart --> Recarregar configurações feitas no SSH
+# usermod -aG docker docker
+# docker version
+# base=https://github.com/docker/machine/releases/download/v0.14.0 &&   curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&   sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+# docker-machine version
+# curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+# chmod +x /usr/local/bin/docker-compose
+# 	
+# service docker stop --> Parar serviço Docker para mudança de disco.
+# ps faux --> Checar real para do Docker
+# mv /var/lib/docker /Docker --> Mover conteúdo Docker para novo diretório
+# ln -s /Docker /var/lib/docker --> Criar link direcionando sempre os dados para o novo disco
+# ls /var/lib/docker/ --> Checar o comando confirmando a mudança ao novo disco
+# service docker start --> Iniciar serviço Docker novamente
+# vi /etc/hosts.allow --> Liberar apenas hosts para acesso
+	sshd : 138.36.3.194 , 177.22.38.121
+	vsftpd: 138.36.3.194 , 177.22.38.121
+# vi /etc/hosts.deny --> Bloquear conexões indesejáveis
+	sshd : ALL
+	vsftpd: ALL
+
+
+# mkdir /Docker/Nagios
+# cd /Docker/Nagios
+# wget https://assets.nagios.com/downloads/nagiosxi/agents/linux-nrpe-agent.tar.gz
+# tar xzf linux-nrpe-agent.tar.gz
+# cd linux-nrpe-agent
+# ./fullinstall
+# Allow hosts: 138.36.3.194 177.22.38.121
+# vi /etc/xinetd.d/nrpe
+# systemctl restart xinetd
+
+
+# Docker update
+
+*Update - sudo apt install docker-ce docker-ce-cli containerd.io
